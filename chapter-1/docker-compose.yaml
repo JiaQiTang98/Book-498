@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  clickhouse-keeper:
+    image: clickhouse/clickhouse-keeper:25.6
+    container_name: clickhouse-keeper
+    restart: always
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - ./config/keeper:/etc/clickhouse-keeper/:ro
+    networks:
+      - clickhouse-network
+    expose:
+      - "9181"
+
+  clickhouse-server:
+    image: clickhouse/clickhouse-server:25.6
+    container_name: clickhouse-server
+    restart: always
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - "9000:9000"
+      - "8123:8123"
+    volumes:
+      - ./config/server:/etc/clickhouse-server/:ro
+    depends_on:
+      - clickhouse-keeper
+    networks:
+      - clickhouse-network
+    environment:
+      - CLICKHOUSE_KEEPER_HOST=clickhouse-keeper
+      - CLICKHOUSE_KEEPER_PORT=9181
+
+networks:
+  clickhouse-network:
+    driver: bridge
+    name: clickhouse-network
