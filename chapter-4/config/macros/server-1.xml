@@ -1,0 +1,7 @@
+<!-- chapter-4/config/macros/server-1.xml -->
+<clickhouse>
+    <macros>
+        <shard>s1</shard>
+        <replica>r1</replica>
+    </macros>
+</clickhouse>

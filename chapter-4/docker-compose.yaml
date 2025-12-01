@@ -1,0 +1,129 @@
+version: '3.8'
+services:
+  clickhouse-keeper:
+    image: clickhouse/clickhouse-keeper:25.6
+    container_name: clickhouse-keeper
+    restart: always
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - ./config/keeper:/etc/clickhouse-keeper/:ro
+    networks:
+      - clickhouse-network
+    expose:
+      - "9181"
+
+  clickhouse-server-1:
+    image: clickhouse/clickhouse-server:25.6
+    container_name: clickhouse-server-1
+    restart: always
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - "9000:9000"
+      - "8123:8123"
+    volumes:
+      - ./config/macros/server-1.xml:/etc/macros.xml
+      - ./config/server:/etc/clickhouse-server/:ro
+    depends_on:
+      - clickhouse-keeper
+    networks:
+      - clickhouse-network
+    environment:
+      - CLICKHOUSE_KEEPER_HOST=clickhouse-keeper
+      - CLICKHOUSE_KEEPER_PORT=9181
+
+  clickhouse-server-2:
+    image: clickhouse/clickhouse-server:25.6
+    container_name: clickhouse-server-2
+    restart: always
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - "9001:9000"
+      - "8124:8123"
+    volumes:
+      - ./config/macros/server-2.xml:/etc/macros.xml
+      - ./config/server:/etc/clickhouse-server/:ro
+    depends_on:
+      - clickhouse-keeper
+    networks:
+      - clickhouse-network
+    environment:
+      - CLICKHOUSE_KEEPER_HOST=clickhouse-keeper
+      - CLICKHOUSE_KEEPER_PORT=9181
+  
+  clickhouse-server-3:
+    image: clickhouse/clickhouse-server:25.6
+    container_name: clickhouse-server-3
+    restart: always
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - "9002:9000"
+      - "8125:8123"
+    volumes:
+      - ./config/macros/server-3.xml:/etc/macros.xml
+      - ./config/server:/etc/clickhouse-server/:ro
+    depends_on:
+      - clickhouse-keeper
+    networks:
+      - clickhouse-network
+    environment:
+      - CLICKHOUSE_KEEPER_HOST=clickhouse-keeper
+      - CLICKHOUSE_KEEPER_PORT=9181
+  
+  clickhouse-server-4:
+    image: clickhouse/clickhouse-server:25.6
+    container_name: clickhouse-server-4
+    restart: always
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - "9003:9000"
+      - "8126:8123"
+    volumes:
+      - ./config/macros/server-4.xml:/etc/macros.xml
+      - ./config/server:/etc/clickhouse-server/:ro
+    depends_on:
+      - clickhouse-keeper
+    networks:
+      - clickhouse-network
+    environment:
+      - CLICKHOUSE_KEEPER_HOST=clickhouse-keeper
+      - CLICKHOUSE_KEEPER_PORT=9181
+
+networks:
+  clickhouse-network:
+    driver: bridge
+    name: clickhouse-network
