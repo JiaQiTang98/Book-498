@@ -1,0 +1,11 @@
+Test_Case,Execution_Time_Sec,Standard_Deviation
+cpp-batch-100k-100,1.650,0.000
+cpp-batch-1M-10,1.710,0.000
+py-json_stream-100k-100,4.926,0.609
+py-json_stream-1M-10,7.633,0.044
+py-json-100k-100,10.116,0.134
+py-json-1M-10,8.576,0.044
+py-column-100k-100,7.010,0.394
+py-column-1M-10,6.353,0.126
+py-row-100k-100,7.980,0.467
+py-row-1M-10,7.616,0.070

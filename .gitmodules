@@ -1,0 +1,3 @@
+[submodule "chapter-5/cpp-client-example/contribs/clickhouse-cpp"]
+	path = chapter-5/cpp-client-example/contribs/clickhouse-cpp
+	url = https://github.com/ClickHouse/clickhouse-cpp.git
